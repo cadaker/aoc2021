@@ -101,15 +101,25 @@ func main() {
 		boards = append(boards, parseBoard(input))
 	}
 
+	foundFirstBingo := false
+	boardsWithBingo := 0
+
 	for i, num := range numbers {
 		for j := 0; j < len(boards); j++ {
+			hadBingo := hasHorzVertBingo(&boards[j])
 			mark(&boards[j], num)
-			if hasHorzVertBingo(&boards[j]) {
-				fmt.Println("Bingo on board", j, "for number", i, "(", num, ")")
+			if !foundFirstBingo && hasHorzVertBingo(&boards[j]) {
+				fmt.Println("First bingo on board", j, "for number", i, "(", num, ")")
 				fmt.Println(sumOfUnmarked(boards[j]) * num)
-				return
+				foundFirstBingo = true
+			}
+			if !hadBingo && hasHorzVertBingo(&boards[j]) {
+				boardsWithBingo++
+			}
+			if !hadBingo && boardsWithBingo == len(boards) {
+				fmt.Println("Last bingo on board", j, "for number", i, "(", num, ")")
+				fmt.Println(sumOfUnmarked(boards[j]) * num)
 			}
 		}
 	}
-	fmt.Println("No bingo?!")
 }
