@@ -58,4 +58,9 @@ func main() {
 		fish = iterate(fish)
 	}
 	fmt.Println(totalFish(fish))
+	for i := 0; i < 256 - 80; i++ {
+		fish = iterate(fish)
+
+	}
+	fmt.Println(totalFish(fish))
 }
