@@ -71,6 +71,15 @@ func alignmentFuel(crabs []int, pos int) int {
 	return fuel
 }
 
+func alignmentFuel2(crabs []int, pos int) int {
+	fuel := 0
+	for _, c := range crabs {
+		dx := iabs(c - pos)
+		fuel += dx * (dx + 1) / 2
+	}
+	return fuel
+}
+
 func main() {
 	crabs, err := parseInput()
 	if err != nil {
@@ -82,8 +91,11 @@ func main() {
 	max := maxElement(crabs)
 
 	minFuel := math.MaxInt
+	minFuel2 := math.MaxInt
 	for pos := min; pos <= max; pos++ {
 		minFuel = imin(minFuel, alignmentFuel(crabs, pos))
+		minFuel2 = imin(minFuel2, alignmentFuel2(crabs, pos))
 	}
 	fmt.Println(minFuel)
+	fmt.Println(minFuel2)
 }
