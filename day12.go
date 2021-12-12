@@ -27,16 +27,41 @@ func isBigCave(s string) bool {
 	return 'A' <= s[0] && s[0] <= 'Z'
 }
 
-func contains(haystack []string, needle string) bool {
+func count(haystack []string, needle string) int {
+	c := 0
 	for _, s := range haystack {
 		if s == needle {
-			return true
+			c++
 		}
 	}
-	return false
+	return c
 }
 
-func countPaths(g graph) int {
+func canVisitOnce(path []string, next string) bool {
+	return count(path, next) == 0
+}
+
+func canVisitOneTwice(path []string, next string) bool {
+	counts := map[string]int{}
+	anyDoubleVisit := false
+	for _, p := range path {
+		if !isBigCave(p) {
+			counts[p]++
+			if counts[p] > 1 {
+				anyDoubleVisit = true
+			}
+		}
+	}
+	if next == "start" {
+		return false
+	} else if anyDoubleVisit {
+		return counts[next] == 0
+	} else {
+		return true
+	}
+}
+
+func countPaths(g graph, canVisit func([]string, string)bool) int {
 	count := 0
 	queue := [][]string{{"start"}}
 	for len(queue) > 0 {
@@ -47,7 +72,7 @@ func countPaths(g graph) int {
 			count++
 		} else {
 			for _, next := range g[currentPos] {
-				if isBigCave(next) || !contains(path, next) {
+				if isBigCave(next) || canVisit(path, next) {
 					newpath := append([]string{}, path...)
 					queue = append(queue, append(newpath, next))
 				}
@@ -60,5 +85,6 @@ func countPaths(g graph) int {
 func main() {
 	g := parseInput()
 
-	fmt.Println(countPaths(g))
+	fmt.Println(countPaths(g, canVisitOnce))
+	fmt.Println(countPaths(g, canVisitOneTwice))
 }
