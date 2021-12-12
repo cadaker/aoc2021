@@ -84,4 +84,10 @@ func main() {
 		totalFlashes += step(grid)
 	}
 	fmt.Println(totalFlashes)
+	for iter := 101; true; iter++ {
+		if step(grid) == 100 {
+			fmt.Println(iter)
+			break
+		}
+	}
 }
