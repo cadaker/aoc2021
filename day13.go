@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -96,6 +97,29 @@ func foldY(points pointSet, coord int) pointSet {
 	return ret
 }
 
+func displayPoints(points pointSet) {
+	maxX := math.MinInt
+	maxY := math.MinInt
+	for p, _ := range points {
+		if p.x > maxX {
+			maxX = p.x
+		}
+		if p.y > maxY {
+			maxY = p.y
+		}
+	}
+	for y := 0; y <= maxY; y++ {
+		for x := 0; x <= maxX; x++ {
+			if points[point{x,y}] {
+				fmt.Print("#")
+			} else {
+				fmt.Print(" ")
+			}
+		}
+		fmt.Println()
+	}
+}
+
 func main() {
 	points, folds, err := parseInput()
 	if err != nil {
@@ -107,4 +131,13 @@ func main() {
 	} else {
 		fmt.Println(len(foldY(points, folds[0].coord)))
 	}
+
+	for _, f := range folds {
+		if f.axis == X {
+			points = foldX(points, f.coord)
+		} else {
+			points = foldY(points, f.coord)
+		}
+	}
+	displayPoints(points)
 }
