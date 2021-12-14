@@ -93,7 +93,9 @@ func main() {
 		return
 	}
 
-	table := pairExpansions(rules, 10)
-	expandedCounts := countExpanded(template, table, 10)
-	fmt.Println(findResult(expandedCounts))
+	table := pairExpansions(rules, 40)
+	expandedCounts10 := countExpanded(template, table, 10)
+	expandedCounts40 := countExpanded(template, table, 40)
+	fmt.Println(findResult(expandedCounts10))
+	fmt.Println(findResult(expandedCounts40))
 }
