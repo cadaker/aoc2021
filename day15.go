@@ -119,6 +119,32 @@ func gridPaths(grid [][]int, startx int, starty int) map[point]int {
 	return bestPaths
 }
 
+func wrap(n int) int {
+	if n > 9 {
+		return n - 9
+	} else {
+		return n
+	}
+}
+
+func extendGrid(grid [][]int) [][]int {
+	height := len(grid)
+	width := len(grid[0])
+	var biggrid [][]int
+	for rn := 0; rn < 5; rn++ {
+		for r := 0; r < height; r++ {
+			var line []int
+			for cn := 0; cn < 5; cn++ {
+				for c := 0; c < width; c++ {
+					line = append(line, wrap(grid[r][c] + cn + rn))
+				}
+			}
+			biggrid = append(biggrid, line)
+		}
+	}
+	return biggrid
+}
+
 func main() {
 	grid, err := parseInput()
 	if err != nil {
@@ -129,4 +155,8 @@ func main() {
 	height := len(grid)
 	width := len(grid[0])
 	fmt.Println(bestPaths[point{height-1, width-1}])
+	biggrid := extendGrid(grid)
+	bestPathsBig := gridPaths(biggrid, 0, 0)
+	fmt.Println(bestPathsBig[point{height*5-1, width*5-1}])
+
 }
